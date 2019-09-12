@@ -30,7 +30,6 @@ RSpec.describe Project, type: :model do
   it "allows two users to share a project name" do
 
     other_user = FactoryBot.create(:user, :Jane)
-
     other_project = other_user.projects.build(
       name: "Test Project",
     )
