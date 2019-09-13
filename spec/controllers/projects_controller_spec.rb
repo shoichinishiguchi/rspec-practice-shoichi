@@ -34,6 +34,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
   end
 
+
   describe "#show" do
     context "as an authorized user" do
       before do
@@ -62,6 +63,39 @@ RSpec.describe ProjectsController, type: :controller do
       end
     end
   end
+
+  describe "#new" do
+    context "as an authorized user" do
+      before do
+        @user = FactoryBot.create(:user)
+        sign_in @user
+      end
+
+      it "responses successfully" do
+        get :new
+        expect(response).to be_success
+      end
+
+      it "returns a 200 response" do
+        get :new
+        expect(response).to have_http_status "200"
+      end
+    end
+
+    context "as a guest" do
+      it "redirects to the sign_in page" do
+        get :new
+        expect(response).to redirect_to "/users/sign_in"
+      end
+
+      it "returns a 302 response" do
+        get :new
+        expect(response).to have_http_status "302"
+      end
+    end
+
+  end
+
 
   describe "#create" do
     context "as an authorized user" do
@@ -104,6 +138,36 @@ RSpec.describe ProjectsController, type: :controller do
       end
     end
   end
+
+  describe "#edit" do
+    context "as an authorized user" do
+      before do
+        @user = FactoryBot.create(:user)
+        sign_in @user
+        @project = FactoryBot.create(:project, owner: @user)
+      end
+
+      it "responds successfully" do
+        get :edit, params: {id: @project.id}
+        expect(response).to be_success
+      end
+    end
+
+    context "as an unauthorized user" do
+      before do
+        @user = FactoryBot.create(:user)
+        other_user = FactoryBot.create(:user)
+        @project = FactoryBot.create(:project, owner: other_user)
+      end
+
+      it "redirects to the dashbord" do
+        sign_in @user
+        get :edit, params: {id: @project.id}
+        expect(response).to redirect_to root_path
+      end
+    end
+  end
+
 
   describe "#update" do
     context "as an authorized user" do
