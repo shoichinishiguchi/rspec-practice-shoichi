@@ -25,7 +25,7 @@ RSpec.feature "Projects", type: :feature do
 
   scenario "guest adds a project" do
     visit projects_path
-    save_and_open_page
+    # save_and_open_page これを使うと、止めて、pageを表示する。launchy gemによって。
     click_link "New Project"
   end
 end
