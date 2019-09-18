@@ -18,11 +18,24 @@ RSpec.describe Note, type: :model do
     #   email: "joetester@example.com",
     #   password: "dottle-nouveau-pavilion-tights-fruze",
     # )
-
     # @project = @user.projects.create(
     #   name: "Test Project",
     # )
   # end
+
+  it "delegates name to the user who created it" do
+    user = double("user", name: "Fake User")
+    note = Note.new
+    allow(note).to receive(:user).and_return(user)
+    expect(note.user_name).to eq "Fake User"
+  end
+
+  it "delegates name to the user who created it" do
+    user = instance_double("User", name: "Fake User")
+    note = Note.new
+    allow(note).to receive(:user).and_return(user)
+    expect(note.user_name).to eq "Fake User"
+  end
 
   it "is valid with a user, project, and message" do
     note = Note.new(
